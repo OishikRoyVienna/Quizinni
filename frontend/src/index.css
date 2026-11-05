@@ -1,0 +1,24 @@
+:root {
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: #f6ecd6;
+  background: #0b1433;
+  --gold: #e8b04a;
+  --gold-dark: #ba7517;
+  --gold-light: #fad38a;
+  --ruby: #c0392b;
+  --teal: #2fb39a;
+  --plum: #7a2e6e;
+  --night: #0d1838;
+  --panel: rgba(16, 28, 66, 0.88);
+  --parchment: #f6ebd0;
+  --display: 'Lalezar', 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #070d26 0%, #0d1838 45%, #2a1f55 80%, #4a2a5e 100%) fixed;
+}
+button, textarea, input { font: inherit; }

@@ -1,0 +1,143 @@
+.app { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 16px 16px 240px; }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; }
+.topbar h1 {
+  font-family: var(--display); font-weight: 400; font-size: 38px; margin: 0;
+  color: var(--gold); text-shadow: 0 2px 0 var(--gold-dark), 0 0 18px rgba(232, 176, 74, 0.35);
+}
+.upload {
+  cursor: pointer; padding: 8px 18px; border: 2px solid var(--gold); border-radius: 20px 20px 6px 6px;
+  color: var(--gold-light); background: var(--panel);
+}
+.upload:hover { background: var(--plum); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 20px; margin-top: 16px; }
+@media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+
+/* ---------- Hintergrund ---------- */
+.backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.backdrop::before {
+  /* Arabeske: Muster aus achtzackigen Sternen */
+  content: ''; position: absolute; inset: 0; opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23E8B04A' stroke-width='1.5'%3E%3Crect x='22' y='22' width='36' height='36'/%3E%3Crect x='22' y='22' width='36' height='36' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='8'/%3E%3Cpath d='M0 40h14M66 40h14M40 0v14M40 66v14'/%3E%3C/g%3E%3C/svg%3E");
+}
+.backdrop__sky { position: absolute; inset: 0 0 40% 0; width: 100%; height: 60%; }
+.star { fill: #fff; animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: 0.25; } }
+.backdrop__moon { position: absolute; top: 70px; right: 230px; width: 90px; filter: drop-shadow(0 0 18px rgba(246, 231, 184, 0.5)); }
+@media (max-width: 700px) { .backdrop__moon { right: 20px; width: 60px; } }
+.backdrop__palace { position: absolute; bottom: 0; left: 0; width: 100%; height: 220px; }
+
+/* ---------- Moderator ---------- */
+.host { display: flex; align-items: flex-end; gap: 12px; min-height: 270px; }
+.bubble {
+  align-self: center; position: relative; background: var(--parchment); color: #4a2a12;
+  padding: 14px 18px; border-radius: 18px; border: 2px solid var(--gold); max-width: 460px;
+  font-size: 17px; animation: pop 0.3s ease-out;
+}
+.bubble::before {
+  content: ''; position: absolute; left: -12px; top: 50%; margin-top: -10px;
+  border: 10px solid transparent; border-right-color: var(--gold); border-left: 0;
+}
+@keyframes pop { 0% { transform: scale(0.7); } 70% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* ---------- Djinni ---------- */
+.djinn { width: 210px; flex-shrink: 0; overflow: visible; }
+.djinn * { transform-box: view-box; }
+.djinn__spirit { transform-origin: 110px 240px; animation: float 3s ease-in-out infinite; transition: transform 0.6s; }
+@keyframes float { 50% { transform: translateY(-8px); } }
+.djinn__tail { transform-origin: 182px 228px; animation: sway 2.2s ease-in-out infinite; }
+@keyframes sway { 50% { transform: skewX(4deg); } }
+.djinn__lamp { filter: drop-shadow(0 0 10px rgba(232, 176, 74, 0.45)); }
+
+.djinn__lid { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); animation: blink 4.5s infinite; }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+.djinn__pupil { transition: transform 0.4s; }
+.djinn__arm { transition: transform 0.4s; }
+.djinn__arm--l { transform-origin: 78px 125px; }
+.djinn__arm--r { transform-origin: 142px 125px; }
+.djinn__brow { transition: transform 0.4s; }
+.djinn__brow--l { transform-origin: 97px 68px; }
+.djinn__brow--r { transform-origin: 123px 68px; }
+.djinn__mouth-sad, .djinn__mouth-open, .djinn__sparkles { opacity: 0; }
+.djinn__mouth-open { transform-box: fill-box; transform-origin: 50% 0; }
+
+/* Sprechen */
+.djinn--talk .djinn__mouth-smile { opacity: 0; }
+.djinn--talk .djinn__mouth-open { opacity: 1; animation: talk 0.18s ease-in-out infinite alternate; }
+@keyframes talk { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+.djinn--talk .djinn__arm--r { transform: rotate(-45deg); }
+
+/* Freuen */
+.djinn--happy .djinn__spirit { animation: rise 0.6s ease-out 3; }
+@keyframes rise { 40% { transform: translateY(-28px) scale(1.06); } }
+.djinn--happy .djinn__arm--l { transform: rotate(125deg); }
+.djinn--happy .djinn__arm--r { transform: rotate(-125deg); }
+.djinn--happy .djinn__sparkles { animation: sparkle 0.6s ease-in-out 3; }
+@keyframes sparkle { 50% { opacity: 1; } }
+
+/* Traurig: sinkt in die Lampe zurück */
+.djinn--sad .djinn__spirit { animation: none; transform: translateY(26px) scale(0.86); }
+.djinn--sad .djinn__mouth-smile { opacity: 0; }
+.djinn--sad .djinn__mouth-sad { opacity: 1; }
+.djinn--sad .djinn__pupil { transform: translateY(3px); }
+.djinn--sad .djinn__brow--l { transform: rotate(-14deg); }
+.djinn--sad .djinn__brow--r { transform: rotate(14deg); }
+
+/* Nachdenken */
+.djinn--think .djinn__spirit { animation: none; transform: rotate(-6deg); }
+.djinn--think .djinn__pupil { transform: translate(3px, -3px); }
+.djinn--think .djinn__brow--l { transform: translateY(-3px); }
+.djinn--think .djinn__arm--r { transform: rotate(-100deg); }
+
+/* ---------- Frage ---------- */
+.question-card {
+  margin-top: 16px; padding: 18px; border: 3px double var(--gold); border-radius: 24px 24px 12px 12px;
+  background: var(--panel);
+}
+.meta { margin: 0; font-size: 13px; color: var(--gold-light); opacity: 0.8; }
+.question { font-size: 20px; font-weight: 500; margin: 8px 0 12px; }
+textarea {
+  width: 100%; resize: vertical; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--gold-dark); background: var(--night); color: inherit;
+}
+textarea:focus { outline: 2px solid var(--gold); }
+.error { color: #f09595; margin: 4px 0 0; font-size: 14px; }
+.actions { display: flex; justify-content: space-between; margin-top: 12px; gap: 8px; flex-wrap: wrap; }
+.jokers { display: flex; gap: 8px; }
+
+button {
+  padding: 8px 16px; border-radius: 10px; border: 1px solid var(--gold);
+  background: transparent; color: var(--gold-light); cursor: pointer;
+}
+button:hover:not(:disabled) { background: var(--plum); }
+button:disabled { opacity: 0.4; cursor: default; text-decoration: line-through; }
+button.primary {
+  background: var(--gold); border-color: var(--gold-light); color: #412402; font-weight: 600;
+  box-shadow: 0 3px 0 var(--gold-dark);
+}
+button.primary:hover:not(:disabled) { background: var(--gold-light); }
+button.primary:disabled { text-decoration: none; }
+.start { margin-top: 24px; font-family: var(--display); font-weight: 400; font-size: 24px; padding: 10px 32px; }
+
+/* ---------- Punkte-Leiter ---------- */
+.ladder {
+  background: var(--panel); border: 3px double var(--gold); border-radius: 60px 60px 12px 12px;
+  padding: 28px 10px 10px; align-self: start;
+}
+.step {
+  display: flex; justify-content: space-between; padding: 5px 12px; border-radius: 8px;
+  color: var(--gold-light); font-size: 14px; opacity: 0.75;
+}
+.step.safe { border: 1px solid var(--gold); opacity: 1; }
+.step.done { color: #5dcaa5; opacity: 1; }
+.step.current { background: var(--gold); color: #412402; font-weight: 600; opacity: 1; }
+.sources { font-size: 12px; color: var(--gold-light); opacity: 0.7; margin: 10px 0 0; word-break: break-word; }
+
+/* ---------- Konfetti ---------- */
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 10; }
+.confetti span {
+  position: absolute; top: -12px; width: 8px; height: 12px; border-radius: 2px;
+  animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards;
+}
+@keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
