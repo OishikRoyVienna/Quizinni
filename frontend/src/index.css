@@ -13,6 +13,7 @@
   --panel: rgba(16, 28, 66, 0.88);
   --parchment: #f6ebd0;
   --display: 'Lalezar', 'Segoe UI', sans-serif;
+  --title: 'Aladin', 'Lalezar', serif;
 }
 
 * { box-sizing: border-box; }
