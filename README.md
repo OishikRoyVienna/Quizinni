@@ -67,7 +67,8 @@ Dann http://localhost:5173 öffnen, PDF hochladen, „Spiel starten“.
 3. Backend neu starten. `http://localhost:2002/api/health` zeigt `"provider": "gemini"`.
 
 Zurück zum lokalen Modell: in der `.env` `LLM_PROVIDER=ollama` setzen.
-Embeddings laufen weiterhin lokal über Ollama (`nomic-embed-text`), Ollama muss also trotzdem laufen.
+Die Embeddings laufen standardmäßig über denselben Anbieter (Gemini: `gemini-embedding-001`), mit Gemini wird Ollama also gar nicht gebraucht.
+Mit `EMBED_PROVIDER=ollama` bleiben sie lokal. Jeder Embedding-Anbieter hat eine eigene Collection, nach einem Wechsel PDFs neu hochladen.
 Die `.env` ist in `.gitignore` und wird nie committet.
 
 ## Anderes Ollama-Modell verwenden
