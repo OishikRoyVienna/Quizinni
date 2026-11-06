@@ -60,6 +60,16 @@ npm run dev
 
 Dann http://localhost:5173 öffnen, PDF hochladen, „Spiel starten“.
 
-## Anderes Modell verwenden
+## Gemini statt Ollama verwenden
 
-Per Umgebungsvariable, z. B. `set CHAT_MODEL=llama3.1:8b` vor dem Start des Backends.
+1. API-Key in [Google AI Studio](https://aistudio.google.com) erstellen.
+2. `backend/.env.example` nach `backend/.env` kopieren und `GEMINI_API_KEY` eintragen.
+3. Backend neu starten. `http://localhost:2002/api/health` zeigt `"provider": "gemini"`.
+
+Zurück zum lokalen Modell: in der `.env` `LLM_PROVIDER=ollama` setzen.
+Embeddings laufen weiterhin lokal über Ollama (`nomic-embed-text`), Ollama muss also trotzdem laufen.
+Die `.env` ist in `.gitignore` und wird nie committet.
+
+## Anderes Ollama-Modell verwenden
+
+In der `.env` z. B. `OLLAMA_MODEL=llama3.1:8b` setzen.
