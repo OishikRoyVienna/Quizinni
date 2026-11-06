@@ -5,3 +5,5 @@ ollama
 chromadb
 pypdf
 pydantic
+google-genai
+python-dotenv

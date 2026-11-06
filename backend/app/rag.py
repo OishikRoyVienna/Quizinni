@@ -42,7 +42,7 @@ def ingest_pdf(filename: str, data: bytes) -> int:
 def search(query: str, k: int = config.TOP_K) -> list[dict]:
     if _collection.count() == 0:
         return []
-    res = _collection.query(query_embeddings=llm.embed([query]), n_results=k)
+    res = _collection.query(query_embeddings=llm.embed([query], is_query=True), n_results=k)
     return [
         {"text": doc, "source": meta["source"], "page": meta["page"]}
         for doc, meta in zip(res["documents"][0], res["metadatas"][0])

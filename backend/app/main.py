@@ -1,9 +1,10 @@
 """FastAPI-Backend der Quizshow. Start: uvicorn app.main:app --reload --port 2002 (im Ordner backend)."""
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from . import config, guardrails, quiz, rag
+from . import config, guardrails, llm, quiz, rag
 
 app = FastAPI(title="Quizinni")
 app.add_middleware(
@@ -12,6 +13,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(llm.LLMBusyError)
+def llm_busy(_: Request, exc: llm.LLMBusyError):
+    return JSONResponse(status_code=503, content={"detail": str(exc)})
 
 
 class QuestionRequest(BaseModel):
@@ -32,7 +38,7 @@ class HintRequest(BaseModel):
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "model": config.CHAT_MODEL, "sources": rag.list_sources()}
+    return {"status": "ok", "provider": config.LLM_PROVIDER, "model": config.CHAT_MODEL, "sources": rag.list_sources()}
 
 
 @app.post("/api/upload")

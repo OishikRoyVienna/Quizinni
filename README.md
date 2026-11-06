@@ -29,7 +29,17 @@ frontend/           React + Vite (Spiel-UI im orientalischen Stil: Djinni, Palas
 
 ## Einrichtung
 
+**Voraussetzungen:** Python **3.10 oder neuer** und Node.js.
+
+Auf dem Mac ist das vorinstallierte `python3` oft noch 3.9 (prüfen mit `python3 --version`). Dann eine neuere Version per [Homebrew](https://brew.sh) installieren:
+
+```bash
+brew install python@3.12 node
+```
+
 ### 1. Ollama installieren und Modelle laden
+
+Nur nötig, wenn du lokal mit Ollama arbeitest. Mit Gemini diesen Schritt überspringen (siehe [Gemini statt Ollama verwenden](#gemini-statt-ollama-verwenden)).
 
 Ollama von https://ollama.com herunterladen und installieren, dann:
 
@@ -40,6 +50,8 @@ ollama pull nomic-embed-text
 
 ### 2. Backend starten
 
+**Windows:**
+
 ```bash
 cd backend
 python -m venv .venv
@@ -47,6 +59,18 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 2002
 ```
+
+**macOS / Linux:**
+
+```bash
+cd backend
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 2002
+```
+
+Das venv nur einmal anlegen. Bei jedem weiteren Start reichen `cd backend`, `source .venv/bin/activate` (Windows: `.venv\Scripts\activate`) und der `uvicorn`-Befehl.
 
 Läuft auf http://localhost:2002 (API-Doku: http://localhost:2002/docs).
 
@@ -60,6 +84,17 @@ npm run dev
 
 Dann http://localhost:5173 öffnen, PDF hochladen, „Spiel starten“.
 
-## Anderes Modell verwenden
+## Gemini statt Ollama verwenden
 
-Per Umgebungsvariable, z. B. `set CHAT_MODEL=llama3.1:8b` vor dem Start des Backends.
+1. API-Key in [Google AI Studio](https://aistudio.google.com) erstellen.
+2. `backend/.env.example` nach `backend/.env` kopieren und `GEMINI_API_KEY` eintragen.
+3. Backend neu starten. `http://localhost:2002/api/health` zeigt `"provider": "gemini"`.
+
+Zurück zum lokalen Modell: in der `.env` `LLM_PROVIDER=ollama` setzen.
+Die Embeddings laufen standardmäßig über denselben Anbieter (Gemini: `gemini-embedding-001`), mit Gemini wird Ollama also gar nicht gebraucht.
+Mit `EMBED_PROVIDER=ollama` bleiben sie lokal. Jeder Embedding-Anbieter hat eine eigene Collection, nach einem Wechsel PDFs neu hochladen.
+Die `.env` ist in `.gitignore` und wird nie committet.
+
+## Anderes Ollama-Modell verwenden
+
+In der `.env` z. B. `OLLAMA_MODEL=llama3.1:8b` setzen.
